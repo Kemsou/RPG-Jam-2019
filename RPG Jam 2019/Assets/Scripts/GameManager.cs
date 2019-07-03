@@ -35,12 +35,17 @@ public class GameManager : MonoBehaviour , IPersistence
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(Application.persistentDataPath);
+        //Debug.Log(Application.persistentDataPath);
     }
 
     public void Save()
     {
         PersistenceManager P = new PersistenceManager();
         P.Save(this);
+    }
+
+    public void Load(string saveName){
+        PersistenceManager P = new PersistenceManager();
+        P.Load(saveName);
     }
 }
