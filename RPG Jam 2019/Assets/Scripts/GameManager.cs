@@ -2,11 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour , IPersistence
 {
     // Start is called before the first frame update
+
+    public string FileName {get;}
+
+    public GameManager(){
+        this.FileName = "papa";
+    }
+
     void Start()
     {
+        this.Save();
 
     }
 
@@ -27,6 +35,12 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Debug.Log("test");
+        Debug.Log(Application.persistentDataPath);
+    }
+
+    public void Save()
+    {
+        PersistenceManager P = new PersistenceManager();
+        P.Save(this);
     }
 }
