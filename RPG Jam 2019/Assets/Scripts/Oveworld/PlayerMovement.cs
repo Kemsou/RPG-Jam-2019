@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-               Debug.Log(GameSaves.Instance.FileName);
+        
     }
 
     void Awake()

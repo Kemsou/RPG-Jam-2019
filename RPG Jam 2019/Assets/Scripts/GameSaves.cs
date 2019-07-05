@@ -82,12 +82,9 @@ public sealed class GameSaves
         try
         {
             BinaryFormatter formatter = new BinaryFormatter();
-            // Deserialize the hashtable from the file and 
-            // assign the reference to the local variable.
-            Debug.Log(this.gamesStates.FileName);
+
             this.gamesStates = (GamesStates)formatter.Deserialize(fs);
             this.FileName = this.gamesStates.FileName;
-            Debug.Log(this.gamesStates.FileName);
 
         }
         catch (SerializationException e)
