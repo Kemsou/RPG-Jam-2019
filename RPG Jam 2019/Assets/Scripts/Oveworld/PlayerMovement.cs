@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
+               Debug.Log(GameSaves.Instance.FileName);
     }
 
     void Awake()
@@ -31,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        Debug.Log("OnCollisionEnter2D");
+;
 
     }
 }

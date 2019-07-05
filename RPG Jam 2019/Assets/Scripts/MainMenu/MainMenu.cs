@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System;
 
 
 public class MainMenu : MonoBehaviour
@@ -11,27 +12,25 @@ public class MainMenu : MonoBehaviour
     public Canvas canvas;
     public GameObject mainPanel;
     public GameObject loadPanel;
+    public GameObject newGamePanel;
     public Button[] loadPanelButtons;
+
+    public InputField saveNameInput;
 
     private GameObject gameManager;
     private GameObject P;
-    private PersistenceManager pComponent;
-    private string  sPath ;
-    
+    private string sPath;
+
     // Start is called before the first frame update
     void Start()
     {
         sPath = Application.persistentDataPath + "/";
-        canvas = GetComponent<Canvas>();
-        mainPanel = GameObject.Find("MainPanel");
-        loadPanel = GameObject.Find("LoadPanel");
         loadPanelButtons = loadPanel.GetComponentsInChildren<Button>();
         loadPanel.SetActive(false);
+        newGamePanel.SetActive(false);
 
-         gameManager = GameObject.FindWithTag("gameManager");
-         if (gameManager == null){
-            gameManager = new GameObject("GameManager");
-         }
+        GameSaves.Instance.FileName = "pimous";
+
     }
 
     // Update is called once per frame    
@@ -43,37 +42,46 @@ public class MainMenu : MonoBehaviour
 
     public void NewGame()
     {
-        gameManager.AddComponent<GameManagerComponent>();
+        mainPanel.SetActive(false);
+        newGamePanel.SetActive(true);
+
+    }
+
+    public void StartNewGame()
+    {
+        if (saveNameInput.text == ""){
+            GameSaves.Instance.SetGameStatesData("Blank");
+        }else{
+             GameSaves.Instance.SetGameStatesData(saveNameInput.text);
+        }
+       
+        GameSaves.Instance.Save();
         SceneManager.LoadScene(newGameScene);
-        
     }
 
     public void LoadGamePanel()
     {
         mainPanel.SetActive(false);
         loadPanel.SetActive(true);
-        
+
         List<string> tempFilesNames = new List<string>();
         foreach (string sFileName in System.IO.Directory.GetFiles(sPath))
         {
-           tempFilesNames.Add(sFileName);
+            tempFilesNames.Add(sFileName);
         }
-       
+
         for (int i = 0; i < tempFilesNames.Count; i++)
         {
-            loadPanelButtons[i].GetComponentInChildren<Text>().text = tempFilesNames[i].Remove(0,sPath.Length);
+            loadPanelButtons[i].GetComponentInChildren<Text>().text = tempFilesNames[i].Remove(0, sPath.Length);
         }
-        
+
     }
 
     public void LoadGame(Button b)
     {
-        P = new GameObject("persitance");
-        P.AddComponent<PersistenceManager>();
-        pComponent = P.GetComponent<PersistenceManager>();
-        //GameManagerComponent t = (GameManagerComponent)(P.Load(b.GetComponentInChildren<Text>().text));
-        Debug.Log(pComponent.Load(b.GetComponentInChildren<Text>().text));
-        //gameManager.AddComponent<GameManagerComponent>();
+
+        //PersistenceManager.Instance.Load(b.GetComponentInChildren<Text>().text);
+        GameSaves.Instance.load(b.GetComponentInChildren<Text>().text);
         SceneManager.LoadScene(newGameScene);
     }
 
@@ -83,6 +91,7 @@ public class MainMenu : MonoBehaviour
     {
         mainPanel.SetActive(true);
         loadPanel.SetActive(false);
+        newGamePanel.SetActive(false);
     }
 
     public void QuitGame()
