@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        
+
     }
 
     void Awake()
@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-
+        //Debug.Log(GameSaves.Instance.gamesStates.entitys[0].name);
         var move = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0);
         move = move.normalized * speed * Time.deltaTime;
         rb2D.MovePosition(transform.position + move);
@@ -32,7 +32,6 @@ public class PlayerMovement : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-;
 
     }
 }

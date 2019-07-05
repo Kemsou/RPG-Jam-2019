@@ -22,7 +22,6 @@ public sealed class GameSaves
     public GameSaves()
     {
         gamesStates = new GamesStates();
-
     }
 
     public static GameSaves Instance
