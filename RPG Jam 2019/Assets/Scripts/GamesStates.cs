@@ -8,12 +8,12 @@ public class GamesStates
 {
     public string FileName { get; set; }
 
-    public List<Character> entitys { get; set; }
+    public Hashtable entities { get; set; }
 
     public GamesStates()
     {
 
-        entitys = new List<Character>();
+        entities = new Hashtable();
     }
 
 }
