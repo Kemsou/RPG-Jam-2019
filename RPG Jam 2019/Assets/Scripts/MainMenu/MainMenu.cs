@@ -55,7 +55,7 @@ public class MainMenu : MonoBehaviour
              GameSaves.Instance.SetGameStatesData(saveNameInput.text);
         }
        
-        GameSaves.Instance.gamesStates.entitys.Add(new Character("Bligou"));
+        GameSaves.Instance.gamesStates.entities.Add("test", "Bligou");
         GameSaves.Instance.Save();
         SceneManager.LoadScene(newGameScene);
     }
