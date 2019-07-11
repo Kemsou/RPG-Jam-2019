@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3a098dbcba8282498172c7a997bc389, type: 3}
+  m_Name: BasicAttack
+  m_EditorClassIdentifier: 
+  name: 
+  desc: 
+  manaCost: 0
+  healthCost: 0
+  range: 0
+  target: 0
+  physicalDamage: 0
+  strengthPhysicalMultiplier: 0
+  dexterityPhysicalMultiplier: 0
+  intellectPhysicalMultiplier: 0
+  fireDamage: 0
+  strengthFireMultiplier: 0
+  dexterityFireMultiplier: 0
+  intellectFireMultiplier: 0
+  healing: 0
+  strengthHealMultiplier: 0
+  dexterityHealMultiplier: 0
+  intellectHealMultiplier: 0
+  poisonChance: 0
+  sleepChance: 0

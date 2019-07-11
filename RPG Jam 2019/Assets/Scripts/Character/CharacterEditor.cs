@@ -6,7 +6,8 @@ using UnityEditor;
 [CustomEditor(typeof(Character))]
 public class CharacterEditor : Editor
 {
-    int selected = 0;
+    int selectedWeapon = 0;
+    int selectedArmor = 0;
 
     public override void OnInspectorGUI() {
         base.OnInspectorGUI();
@@ -23,9 +24,18 @@ public class CharacterEditor : Editor
         }
 
         //display all the weapons and let the player select one
-        selected = EditorGUILayout.Popup("Weapon", selected, weaponsName.ToArray());
+        selectedWeapon = EditorGUILayout.Popup("Weapon", selectedWeapon, weaponsName.ToArray());
 
         //set the character weapon depending on the selectedIndex
-        myTarget.weapon = (Weapon)weaponsResource[selected];
+        myTarget.weapon = (Weapon)weaponsResource[selectedWeapon];
+
+        //do the same with armor
+        Object[] armorResource = Resources.LoadAll("Armors", typeof(Armor));
+        List<string> armorName = new List<string>();
+        foreach (Object o in armorResource) {
+            armorName.Add(o.name);
+        }
+        selectedArmor = EditorGUILayout.Popup("Armor", selectedArmor, weaponsName.ToArray());
+        myTarget.armor = (Armor)armorResource[selectedArmor];
     }
 }
