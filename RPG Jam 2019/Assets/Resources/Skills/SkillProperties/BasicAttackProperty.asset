@@ -10,17 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a3a098dbcba8282498172c7a997bc389, type: 3}
-  m_Name: BasicAttack
+  m_Name: BasicAttackProperty
   m_EditorClassIdentifier: 
-  name: 
+  name: Basic Attack Property
   desc: 
-  manaCost: 0
-  healthCost: 0
   range: 0
   target: 0
-  physicalDamage: 0
-  strengthPhysicalMultiplier: 0
-  dexterityPhysicalMultiplier: 0
+  physicalDamage: 10
+  strengthPhysicalMultiplier: 2
+  dexterityPhysicalMultiplier: 1
   intellectPhysicalMultiplier: 0
   fireDamage: 0
   strengthFireMultiplier: 0
