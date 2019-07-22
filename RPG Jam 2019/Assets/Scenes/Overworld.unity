@@ -2265,6 +2265,8 @@ MonoBehaviour:
   dialogueText: {fileID: 1261905769}
   charPicture: {fileID: 57485043}
   DialogueCanvas: {fileID: 1555963791}
+  player: {fileID: 663307442}
+  canInteract: 1
 --- !u!4 &1468841879
 Transform:
   m_ObjectHideFlags: 0
@@ -12100,6 +12102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trigger: {fileID: 1929354051}
+  dm: {fileID: 1468841878}
 --- !u!114 &1929354051
 MonoBehaviour:
   m_ObjectHideFlags: 0

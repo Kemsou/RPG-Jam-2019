@@ -5,6 +5,7 @@ using UnityEngine;
 public class InteractionScript : MonoBehaviour
 {
     public DialogueTrigger trigger;
+    public DialogueManager dm;
     // Start is called before the first frame update
     private Collision2D col;
     void OnCollisionEnter2D(Collision2D collision)
@@ -26,7 +27,7 @@ public class InteractionScript : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown("e") && col != null)
+        if (Input.GetKeyDown("e") && col != null && dm.canInteract )
         {
             this.trigger.TriggerDialogue();
         }

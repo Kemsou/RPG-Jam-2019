@@ -14,15 +14,22 @@ public class DialogueManager : MonoBehaviour {
 
 	private Queue<string> sentences;
 
+	public GameObject player;
+	public bool canInteract = true;
+
 
 	// Use this for initialization
 	void Start () {
 		sentences = new Queue<string>();
 		this.DialogueCanvas.enabled = false;
+		
 	}
 
 	public void StartDialogue (Dialogue dialogue)
 	{
+		player.GetComponent<PlayerMovement>().enabled = false;
+		this.canInteract = false;
+		
 		this.DialogueCanvas.enabled = true;
 
 		nameText.text = dialogue.charName;
@@ -64,6 +71,8 @@ public class DialogueManager : MonoBehaviour {
 	void EndDialogue()
 	{
 		this.DialogueCanvas.enabled = false;
+		player.GetComponent<PlayerMovement>().enabled = true;
+		this.canInteract = true;
 	}
 
 }
