@@ -10,21 +10,23 @@ public class DialogueManager : MonoBehaviour {
 
     public Image charPicture;
 
-	public Animator animator;
+	public Canvas DialogueCanvas;
 
 	private Queue<string> sentences;
+
 
 	// Use this for initialization
 	void Start () {
 		sentences = new Queue<string>();
+		this.DialogueCanvas.enabled = false;
 	}
 
 	public void StartDialogue (Dialogue dialogue)
 	{
-		animator.SetBool("IsOpen", true);
+		this.DialogueCanvas.enabled = true;
 
 		nameText.text = dialogue.charName;
-        charPicture.sprite = Resources.Load<Sprite>("char"); // Resources.Load<Sprite>("Assets/Sprites/Overworld/char.png");
+        charPicture.sprite = Resources.Load<Sprite>(dialogue.picturUrl); // Resources.Load<Sprite>("Assets/Sprites/Overworld/char.png");
 
 		sentences.Clear();
 
@@ -61,7 +63,7 @@ public class DialogueManager : MonoBehaviour {
 
 	void EndDialogue()
 	{
-		animator.SetBool("IsOpen", false);
+		this.DialogueCanvas.enabled = false;
 	}
 
 }
