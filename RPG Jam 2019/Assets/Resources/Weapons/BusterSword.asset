@@ -9,15 +9,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3a098dbcba8282498172c7a997bc389, type: 3}
-  m_Name: BasicAttackProperty
+  m_Script: {fileID: 11500000, guid: 9ba86e468dd22ea4389c063ceb8d64d8, type: 3}
+  m_Name: BusterSword
   m_EditorClassIdentifier: 
-  name: Basic Attack Property
-  desc: 
+  name: Buster Sword
+  desc: Huge sword which belonged to Angeal's father
+  price: 99999
+  lvl: 1
   range: 0
   target: 2
   damages:
   - type: 0
-    amount: 10
-  characMultiplier: []
+    amount: 60
+  characBonus: []
+  characMultiplier:
+  - charac: 0
+    multiplier: 2
   alterations: []
+  damagesResistances: []
+  alterationsResistances: []
