@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0d5128f55aa04687b849ba4bb3568, type: 3}
+  m_Name: Cloud
+  m_EditorClassIdentifier: 
+  name: Cloud
+  desc: SOLDIER with blonde hair
+  lvl: 1
+  isAlly: 1
+  currentHealth: 1000
+  currentMana: 20
+  strength: 10
+  dexterity: 7
+  intellect: 5
+  accuracy: 5
+  speed: 0
+  inventory: []
+  armor: {fileID: 11400000, guid: 9aaf477b0a6485d47a7c7b32d7f7644b, type: 2}
+  weapon: {fileID: 11400000, guid: 54518b36b06d56f419940d76153dee96, type: 2}
+  gold: 100

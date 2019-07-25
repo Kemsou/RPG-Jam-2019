@@ -10,20 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ba86e468dd22ea4389c063ceb8d64d8, type: 3}
-  m_Name: test
+  m_Name: Masamune
   m_EditorClassIdentifier: 
-  name: test
-  desc: test desc
-  price: 1
-  lvl: 1
-  baseDamage: 1
-  lifeBonus: 1
-  strengthBonus: 1
-  dexterityBonus: 1
-  intellectBonus: 1
-  accuracyBonus: 11
-  strengthModificator: 1
-  dexterityModificator: 1
-  intellectModificator: 0
-  accuracyModificator: 1
-  defense: 1
+  name: Masamune
+  desc: 
+  price: 0
+  lvl: 0
+  range: 0
+  target: 2
+  damages:
+  - type: 3
+    amount: 10
+  - type: 0
+    amount: 30
+  characBonus:
+  - charac: 4
+    bonus: 5
+  characMultiplier:
+  - charac: 1
+    multiplier: 2
+  alterations: []
+  damagesResistances: []
+  alterationsResistances: []
