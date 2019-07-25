@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5da740a8d7b442a48baa86fe01ca22ef, type: 3}
-  m_Name: FirstDial
+  m_Name: PnjFermier
   m_EditorClassIdentifier: 
-  charName: Voix
+  charName: Fermier
   picturUrl: char
   sentences:
-  - test
-  - vraiment uin test
-  - test 2
-  - ' uidhsq o'
+  - Salut je suis le fermier de la mort
+  - Les champs que tu vois ici je les ai cultiver avec me mimine !
+  - "alors t'avise pas de les pi\xE9tiner si non tu va d\xE9couvrire pourquoi on m'apelle
+    9 orteille"
