@@ -52,7 +52,7 @@ public sealed class GameSaves
 
     public void Save()
     {
-
+       
         FileStream fs = new FileStream(Application.persistentDataPath + "/" + this.FileName, FileMode.Create);
 
         // Construct a BinaryFormatter and use it to serialize the data to the stream.
@@ -75,7 +75,7 @@ public sealed class GameSaves
 
     public void load(string FileNameToLoad)
     {
-
+        Debug.Log(Application.persistentDataPath + "/" + FileNameToLoad);
         // Open the file containing the data that you want to deserialize.
         FileStream fs = new FileStream(Application.persistentDataPath + "/" + FileNameToLoad, FileMode.Open);
         try

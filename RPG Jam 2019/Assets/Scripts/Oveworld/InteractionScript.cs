@@ -27,9 +27,10 @@ public class InteractionScript : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown("e") && col != null && dm.canInteract )
+        if (Input.GetButtonDown("Fire1") && col != null && dm.canInteract )
         {
             this.trigger.TriggerDialogue();
+            Debug.Log("Lunch");
         }
 
     }

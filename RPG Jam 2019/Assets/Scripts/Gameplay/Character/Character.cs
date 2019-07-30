@@ -23,14 +23,43 @@ public class Character : ScriptableObject
     public int accuracy;
     public int speed;
 
-    public List<Item> inventory;
-    public Armor armor;
-    public Weapon weapon;
+    private List<string> inventoryNames;
+    [System.NonSerialized] public List<Item> inventory;
+
+    private string armorName;
+    [System.NonSerialized()] public Armor armor;
+
+    private string weaponName;
+    [System.NonSerialized()] public Weapon weapon;
+
     public int gold;
 
-    public int getTotalCharacWithoutBuff(Characteristic charac) {
+    public void initForSerialisation()
+    {
+        this.inventoryNames = new List<string>();
+        this.armorName = armor.name;
+        this.weaponName = weapon.name;
+        foreach (var item in inventory)
+        {
+            this.inventoryNames.Add(item.name);
+        }
+    }
+
+    public void afterDeserialisation()
+    {
+        this.armor = Resources.Load<Armor>(armorName);
+        this.weapon = Resources.Load<Weapon>(weaponName);
+        foreach (var name in inventoryNames)
+        {
+            this.inventory.Add(Resources.Load<Item>(name));
+        }
+    }
+
+    public int getTotalCharacWithoutBuff(Characteristic charac)
+    {
         int ret = 0;
-        switch (charac) {
+        switch (charac)
+        {
             case Characteristic.Speed:
                 ret += speed;
                 break;
@@ -50,11 +79,13 @@ public class Character : ScriptableObject
                 Debug.Log("ERROR: " + charac.ToString() + " doesn't have a line in getTotalCharacWithoutBuff() method");
                 break;
         }
-        foreach(CharacBonus bonus in armor.characBonus) {
+        foreach (CharacBonus bonus in armor.characBonus)
+        {
             if (bonus.charac == charac)
                 ret += bonus.bonus;
         }
-        foreach (CharacBonus bonus in weapon.characBonus) {
+        foreach (CharacBonus bonus in weapon.characBonus)
+        {
             if (bonus.charac == charac)
                 ret += bonus.bonus;
         }
