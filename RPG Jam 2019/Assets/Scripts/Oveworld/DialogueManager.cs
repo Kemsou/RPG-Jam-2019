@@ -25,6 +25,17 @@ public class DialogueManager : MonoBehaviour {
 		
 	}
 
+	 void Update()
+    {
+
+        if (Input.GetButtonDown("Fire1") && !canInteract )
+        {
+            DisplayNextSentence();
+			Debug.Log("Next");
+        }
+
+    }
+
 	public void StartDialogue (Dialogue dialogue)
 	{
 		player.GetComponent<PlayerMovement>().enabled = false;
@@ -72,6 +83,10 @@ public class DialogueManager : MonoBehaviour {
 	{
 		this.DialogueCanvas.enabled = false;
 		player.GetComponent<PlayerMovement>().enabled = true;
+		Invoke("setCanInteractTrue",0.5f);
+	}
+
+	void setCanInteractTrue(){
 		this.canInteract = true;
 	}
 
