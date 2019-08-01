@@ -25,6 +25,16 @@ public static class Utility {
         }
     }
 
+    public static T FindComponentInChildWithTag<T>(this GameObject parent, string tag) where T : Component {
+        Transform t = parent.transform;
+        foreach (Transform tr in t) {
+            if (tr.tag == tag) {
+                return tr.GetComponent<T>();
+            }
+        }
+        return null;
+    }
+
     public static int getBonusDamageFromMultiplier(int damage, int charac, Multiplier multiplier) {
         switch (multiplier) {
             case Multiplier.D:
@@ -46,7 +56,7 @@ public static class Utility {
     }
 
     //return the corresponding damages info inflicted by a character
-    public static DamagesInfo getDamagesInfo(List<Damage> damages, List<CharacMultiplier> multipliers, List<Alteration> alterations, Character caster, List<Character> targets) {
+    public static DamagesInfo getDamagesInfo(List<Damage> damages, List<CharacMultiplier> multipliers, List<Alteration> alterations, Character caster, Character target) {
         Dictionary<DamageType, int> returnDamages = new Dictionary<DamageType, int>();
         Dictionary<AlterationType, int> returnAlterations = new Dictionary<AlterationType, int>();
         foreach(Damage damage in damages) {
@@ -60,7 +70,7 @@ public static class Utility {
         foreach(Alteration alteration in alterations) {
             returnAlterations.Add(alteration.type, alteration.power);//TODO: apply modifier on alteration's power
         }
-        return new DamagesInfo(returnDamages, returnAlterations, targets);
+        return new DamagesInfo(returnDamages, returnAlterations, target);
     }
 }
 

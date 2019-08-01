@@ -60,4 +60,9 @@ public class Character : ScriptableObject
         }
         return ret < 0 ? 0 : ret;
     }
+
+    //TODO: How to calculate maxHealth ?
+    public int getMaxHealth() {
+        return 100 + strength * 2;
+    }
 }

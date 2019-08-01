@@ -8,10 +8,7 @@ public class CharacterCombat : MonoBehaviour
     Animator animator;
     ParticleSystem ps;
 
-    public string characName;//TODO: set the name automatically
-
-    public bool placeholderAttacker; //to determine if we want to attack with this character or not
-    public CharacterCombat enemy;
+    string characName;
 
     ActInfo currentAct;
 
@@ -20,6 +17,14 @@ public class CharacterCombat : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         ps = GetComponentInChildren<ParticleSystem>();
+    }
+
+    public void setCharacName(string characName) {
+        this.characName = characName;
+    }
+
+    public string getCharacName() {
+        return this.characName;
     }
 
     // Update is called once per frame
@@ -59,11 +64,24 @@ public class CharacterCombat : MonoBehaviour
 
     public void damageEnemy() {
         //TODO: voir comment faire pour le heal
+
+        List<string> characterDone = new List<string>();
         foreach(DamagesInfo dmgInfo in currentAct.damagesInfo) {
-            foreach(Character target in dmgInfo.targets) {
-                CombatManager.i.getCharacterCombatFromName(target.name).getDamaged(0);
+            string currentCharacter = dmgInfo.target.name;
+            int inflictedDamages = 0;
+
+            foreach (DamagesInfo currentDmgInfo in currentAct.damagesInfo) {
+                if(!characterDone.Contains(currentDmgInfo.target.name) && currentDmgInfo.target.name == currentCharacter) {
+                    foreach(KeyValuePair<DamageType, int> dmg in currentDmgInfo.damages)
+                        inflictedDamages += dmg.Value;
+                }
             }
+
+            characterDone.Add(currentCharacter);
+            CombatManager.i.getCharacterCombatFromName(currentCharacter).getDamaged(inflictedDamages);
+
         }
+
     }
 
     public void damageAnimationFinished() {
@@ -73,6 +91,7 @@ public class CharacterCombat : MonoBehaviour
     //we need to notify the attacker when we have taken the damage
     public void getDamaged(int receivedDamage) {
         animator.SetBool("isDamaged", true);
+        CombatManager.i.getDamaged(characName, receivedDamage);
         ps.Play();
     }
 }
