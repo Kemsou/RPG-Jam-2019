@@ -3,22 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-//TODO replace this placeholder by automated gauge creation at start
-[System.Serializable]
-public class PlaceHolderGaugeListe {
-    public string chara;
-    public Slider gauge;
-}
-
 public class CombatUIManager : MonoBehaviour {
-    public List<PlaceHolderGaugeListe> gaugeList;
+    public List<GameObject> alliesGauges;
+    public List<GameObject> enemiesGauges;
+
     public bool debug;
     public Image actionMenu;
-
-    private Queue<string> characterWaitingToChooseAction = new Queue<string>(); //every player character finishing its ATB timer is put in this list to be handled later
-    private bool canOpenMenu = true;
-
-    private string characterInMenu = "";
 
     public bool isATBTimeFlowing = true;
 
@@ -27,12 +17,70 @@ public class CombatUIManager : MonoBehaviour {
     public Color enemyFillingATBGaugeColor = Color.red;
     public Color enemyFullATBGaugeColor = Color.black;
 
+    public AnimationCurve looseHealthSpeedAnimation;
+
     private CombatManager combatManager;
+
+    private Queue<string> characterWaitingToChooseAction = new Queue<string>(); //every player character finishing its ATB timer is put in this list to be handled later
+    private bool canOpenMenu = true;
+
+    private string characterInMenu = "";
+
+    private Dictionary<string, Slider> atbGauges = new Dictionary<string, Slider>();
+    private Dictionary<string, Slider> healthGauges = new Dictionary<string, Slider>();
+    private Dictionary<string, Slider> bufferHealthGauges = new Dictionary<string, Slider>();
+
+    private List<CharacterCombat> charactersCombat = new List<CharacterCombat>();
 
     // Start is called before the first frame update
     void Start() {
         combatManager = CombatManager.i;
         combatManager.initializeCombat(this);
+
+        initializeUI();
+        initializeCharactersGraphics();
+
+    }
+
+    private void initializeUI() {
+        initializeGauges(combatManager.getAlliesList(), alliesGauges);
+        if(debug)
+            initializeGauges(combatManager.getEnemiesList(), enemiesGauges);
+
+        foreach(Character chara in combatManager.characters) {
+            healthGauges[chara.name].value = chara.currentHealth / chara.getMaxHealth();
+            bufferHealthGauges[chara.name].value = chara.currentHealth / chara.getMaxHealth();
+        }
+    }
+
+    private void initializeGauges(List<Character> characters, List<GameObject> gaugesList) {
+        if(characters.Count > gaugesList.Count) {
+            Debug.LogError("ERROR: More character than possibly displayed. Maximum " + gaugesList.Count + ", got " + characters.Count);
+        }
+        for(int i=0; i < characters.Count; i++) {
+            gaugesList[i].SetActive(true);
+            gaugesList[i].GetComponent<Text>().text = characters[i].name.ToUpper();
+            atbGauges.Add(characters[i].name, gaugesList[i].FindComponentInChildWithTag<Slider>("ATB"));
+            healthGauges.Add(characters[i].name, gaugesList[i].FindComponentInChildWithTag<Slider>("HealthBar"));
+            bufferHealthGauges.Add(characters[i].name, gaugesList[i].FindComponentInChildWithTag<Slider>("BufferHealth"));
+        }
+    }
+
+    private void initializeCharactersGraphics() {
+        foreach(Character character in combatManager.characters) {
+            GameObject prefab = GameObject.Instantiate((GameObject)Resources.Load("Characters/Prefabs/" + character.name));
+            if (!prefab) Debug.LogError(character.name + " not found in Characters/Prefab/");
+            if (!character.isAlly) {
+                prefab.transform.localScale = new Vector3(prefab.transform.localScale.x * - 1, prefab.transform.localScale.y, prefab.transform.localScale.z); //if it is an ennemy, we simply reverse it
+            }
+            CharacterCombat currentCharacterCombat = prefab.GetComponentInChildren<CharacterCombat>();
+            currentCharacterCombat.setCharacName(character.name);
+            charactersCombat.Add(currentCharacterCombat);
+        }
+    }
+
+    public List<CharacterCombat> getCharactersCombat() {
+        return this.charactersCombat;
     }
 
     // Update is called once per frame
@@ -79,13 +127,7 @@ public class CombatUIManager : MonoBehaviour {
     }
 
     private Slider getCharaATBGauge(string chara) {
-        foreach (PlaceHolderGaugeListe e in gaugeList) {
-            if (e.chara == chara) {
-                return e.gauge;
-            }
-        }
-        Debug.Log("WARNING: " + chara + " not found in gauge list");
-        return null;
+        return atbGauges[chara];
     }
 
     private void openActingMenu() {
@@ -141,4 +183,25 @@ public class CombatUIManager : MonoBehaviour {
         combatManager.enemyChooseAction(enemyName);
     }
 
+    public void getDamaged(string characterName) {
+        Character damagedCharacter = combatManager.getCharacterFromName(characterName);
+        float oldHealthSliderValue = healthGauges[characterName].value;
+        float newHealthSliderValue = damagedCharacter.currentHealth / damagedCharacter.getMaxHealth();
+        healthGauges[characterName].value = newHealthSliderValue;
+        StopCoroutine(healthDiminution(characterName, oldHealthSliderValue));
+        StartCoroutine(healthDiminution(characterName, oldHealthSliderValue));
+    }
+
+    IEnumerator healthDiminution(string character, float oldSliderValue) {
+        Debug.Log(character+", old life: "+oldSliderValue+", new life: "+ healthGauges[character].value);
+        float timeToPlayAnim = (oldSliderValue - healthGauges[character].value) * 2;
+        float timer = 0;
+        while (bufferHealthGauges[character].value > healthGauges[character].value) {
+
+            Debug.Log(bufferHealthGauges[character].value);
+            timer += Time.deltaTime;
+            bufferHealthGauges[character].value = oldSliderValue - looseHealthSpeedAnimation.Evaluate(timer / timeToPlayAnim);
+            yield return null;
+        }
+    }
 }

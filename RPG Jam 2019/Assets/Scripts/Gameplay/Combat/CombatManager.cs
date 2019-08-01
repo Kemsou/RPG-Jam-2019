@@ -4,15 +4,15 @@ using UnityEngine;
 
 
 public class DamagesInfo {
-    public List<Character> targets;
+    public Character target;
     public Dictionary<DamageType, int> damages;
     public Dictionary<AlterationType, int> inflictedAlterations; //when calculating the alteration chance, the int correspond to the power of the effect.
                                                                  //When inflicting the alteration, we simply don't look at the int. If it is in the dictionary, we inflict it
 
-    public DamagesInfo(Dictionary<DamageType, int> damages, Dictionary<AlterationType, int> inflictedAlterations, List<Character> targets) {
+    public DamagesInfo(Dictionary<DamageType, int> damages, Dictionary<AlterationType, int> inflictedAlterations, Character target) {
         this.damages = damages;
         this.inflictedAlterations = inflictedAlterations;
-        this.targets = targets;
+        this.target = target;
     }
 }
 
@@ -44,12 +44,11 @@ public class CombatManager : MonoBehaviour
     private CombatUIManager combatUIManager;
 
     public List<Character> characters;
-    public List<CharacterCombat> charactersCombat;//TODO: get those automatically
 
     private Queue<ActInfo> charactersWaitingToAct = new Queue<ActInfo>(); //every character waiting to launch an attack is put in this list to be handled later
     public ActInfo actingCharacter = null;
-    public List<string> damagedTarget = new List<string> ();
 
+    private int waitingCharacterDamaged = 0;
 
     public Character getCharacterFromName(string name) {
         foreach (Character chara in characters) {
@@ -62,8 +61,8 @@ public class CombatManager : MonoBehaviour
     }
 
     public CharacterCombat getCharacterCombatFromName(string name) {
-        foreach (CharacterCombat chara in charactersCombat) {
-            if (chara.characName == name) {
+        foreach (CharacterCombat chara in combatUIManager.getCharactersCombat()) {
+            if (chara.getCharacName() == name) {
                 return chara;
             }
         }
@@ -94,19 +93,23 @@ public class CombatManager : MonoBehaviour
     //The action parameter correspond to either a weapon (if it is a basic attack) or a Skill. We then determine the damages from this
     public void makeCharacterAct(string actingCharacterName, Object action, List<Character> targets) {
         Character actingCharacter = getCharacterFromName(actingCharacterName);
+        List<DamagesInfo> listDamages = new List<DamagesInfo>();//one DamagesInfo by target (eahc target will receive different damages because of its armor)
         if (action is Weapon){
             //it is a basic attack
             Weapon charaWeapon = actingCharacter.weapon;
-            charactersWaitingToAct.Enqueue(new ActInfo(Utility.getDamagesInfo(charaWeapon.damages, charaWeapon.characMultiplier, charaWeapon.alterations, actingCharacter, targets), ActType.Attack, actingCharacterName));
-
+            foreach(Character target in targets) {
+                listDamages.Add(calculateDamageTaken(Utility.getDamagesInfo(charaWeapon.damages, charaWeapon.characMultiplier, charaWeapon.alterations, actingCharacter, target), target));
+            }
+            charactersWaitingToAct.Enqueue(new ActInfo(listDamages, ActType.Attack, actingCharacterName));
         } else if(action is Skill) {
             //it is a skill
             Skill skill = (Skill)action;
-            List<DamagesInfo> retDmgInfo = new List<DamagesInfo>(); 
             foreach(SkillProperty property in skill.properties) {
-                retDmgInfo.Add(Utility.getDamagesInfo(property.damages, property.characMultiplier, property.alterations, actingCharacter, targets));
+                foreach (Character target in targets) {
+                    listDamages.Add(calculateDamageTaken(Utility.getDamagesInfo(property.damages, property.characMultiplier, property.alterations, actingCharacter, target), target));
+                }
             }
-            charactersWaitingToAct.Enqueue(new ActInfo(retDmgInfo, ActType.Skill, actingCharacterName));
+            charactersWaitingToAct.Enqueue(new ActInfo(listDamages, ActType.Skill, actingCharacterName));
         } else {
             Debug.LogError(actingCharacterName + " was asked to act with unknown action: " + action.ToString());
         }
@@ -122,18 +125,19 @@ public class CombatManager : MonoBehaviour
     }
 
     //return how much damages the character takes depending on the entry damages (we substract the resistance)
-    private DamagesInfo calculateDamageTaken(DamagesInfo entryDamage, string characterName) {
-        DamagesInfo result = new DamagesInfo(new Dictionary<DamageType, int>(), new Dictionary<AlterationType, int>(), null);
-        Armor defenserArmor = getCharacterFromName(characterName).armor;
+    private DamagesInfo calculateDamageTaken(DamagesInfo entryDamage, Character character) {
+        DamagesInfo result = new DamagesInfo(new Dictionary<DamageType, int>(), new Dictionary<AlterationType, int>(), character);
+        Armor defenserArmor = character.armor;
         foreach(KeyValuePair<DamageType, int> damage in entryDamage.damages) {
             result.damages.Add(damage.Key, damage.Value - defenserArmor.getArmorResistance(damage.Key));//we substract the resistance
         }
+        //TODO something with the alterations
         return result;
     }
 
     public void damageAnimationFinished(string name) {
-        damagedTarget.Remove(name);
-        if(damagedTarget.Count == 0) {
+        waitingCharacterDamaged--;
+        if(waitingCharacterDamaged == 0) {
             actingCharacter = null;
             combatUIManager.isATBTimeFlowing = true; //ATB can now flow again
         }
@@ -143,6 +147,14 @@ public class CombatManager : MonoBehaviour
         List<Character> ret = new List<Character>();
         foreach(Character chara in characters) {
             if (chara.isAlly) ret.Add(chara);
+        }
+        return ret;
+    }
+
+    public List<Character> getEnemiesList() {
+        List<Character> ret = new List<Character>();
+        foreach (Character chara in characters) {
+            if (!chara.isAlly) ret.Add(chara);
         }
         return ret;
     }
@@ -158,22 +170,23 @@ public class CombatManager : MonoBehaviour
 
     }
 
+    public void getDamaged(string character, int damages) {
+        Debug.Log("Current Health: " + getCharacterFromName(character).currentHealth + ", Max Health: " + getCharacterFromName(character).getMaxHealth());
+        getCharacterFromName(character).currentHealth -= damages;
+        combatUIManager.getDamaged(character);
+    }
+
     private void Update() {
         if(actingCharacter == null && charactersWaitingToAct.Count > 0) {
 
             actingCharacter = charactersWaitingToAct.Dequeue();
 
             //we addd every targets of the act into the damagedTargets
-            foreach(DamagesInfo dmgInfo in actingCharacter.damagesInfo) {
-                foreach(Character chara in dmgInfo.targets) {
-                    if(!damagedTarget.Contains(chara.name))
-                        damagedTarget.Add(chara.name);
-                }
-            }
+            waitingCharacterDamaged = actingCharacter.damagesInfo.Count;
 
             //send the act to the component in charge of the animation
-            foreach(CharacterCombat characterCombat in charactersCombat) {
-                if(characterCombat.characName == actingCharacter.characterName) {
+            foreach(CharacterCombat characterCombat in combatUIManager.getCharactersCombat()) {
+                if(characterCombat.getCharacName() == actingCharacter.characterName) {
                     characterCombat.act(actingCharacter);
                     combatUIManager.isATBTimeFlowing = false; //we stop ATB during attack animation
                 }

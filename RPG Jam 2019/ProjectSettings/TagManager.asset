@@ -8,6 +8,9 @@ TagManager:
   - gameManager
   - actionMenu
   - combatMenu
+  - ATB
+  - HealthBar
+  - BufferHealth
   layers:
   - Default
   - TransparentFX
