@@ -24,13 +24,13 @@ public class Character : ScriptableObject
     public int speed;
 
     private List<string> inventoryNames;
-    [System.NonSerialized] public List<Item> inventory;
+    public List<Item> inventory;
 
     private string armorName;
-    [System.NonSerialized()] public Armor armor;
+    public Armor armor;
 
     private string weaponName;
-    [System.NonSerialized()] public Weapon weapon;
+    public Weapon weapon;
 
     public int gold;
 
