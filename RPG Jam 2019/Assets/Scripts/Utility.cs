@@ -72,6 +72,11 @@ public static class Utility {
         }
         return new DamagesInfo(returnDamages, returnAlterations, target);
     }
+
+    public static Character loadNewCharacter(string characterName) {
+        return (Character) Resources.Load("Characters/ScriptableObjects/" + characterName);
+    }
+
 }
 
 public enum Multiplier {None, S, A, B, C, D};

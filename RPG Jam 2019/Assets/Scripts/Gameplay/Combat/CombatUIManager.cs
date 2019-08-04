@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class CombatUIManager : MonoBehaviour {
@@ -186,7 +187,7 @@ public class CombatUIManager : MonoBehaviour {
     public void getDamaged(string characterName) {
         Character damagedCharacter = combatManager.getCharacterFromName(characterName);
         float oldHealthSliderValue = healthGauges[characterName].value;
-        float newHealthSliderValue = damagedCharacter.currentHealth / damagedCharacter.getMaxHealth();
+        float newHealthSliderValue = (float)damagedCharacter.currentHealth / (float)damagedCharacter.getMaxHealth();
         healthGauges[characterName].value = newHealthSliderValue;
         StopCoroutine(healthDiminution(characterName, oldHealthSliderValue));
         StartCoroutine(healthDiminution(characterName, oldHealthSliderValue));
@@ -197,10 +198,26 @@ public class CombatUIManager : MonoBehaviour {
         float timeToPlayAnim = (oldSliderValue - healthGauges[character].value) * 2;
         float timer = 0;
         while (bufferHealthGauges[character].value > healthGauges[character].value) {
-
-            Debug.Log(bufferHealthGauges[character].value);
             timer += Time.deltaTime;
             bufferHealthGauges[character].value = oldSliderValue - looseHealthSpeedAnimation.Evaluate(timer / timeToPlayAnim);
+            if (bufferHealthGauges[character].value <= 0) {
+                Character chara = combatManager.getCharacterFromName(character);
+
+                //kill the character
+                combatManager.characters.Remove(chara);
+                Destroy(bufferHealthGauges[character].gameObject.transform.parent);
+
+                //TODO do something better with end of fight transitions
+                if(combatManager.getAlliesList().Count == 0) {
+                    Debug.Log("GAME OVER");
+                    Destroy(combatManager.gameObject);
+                    SceneManager.LoadScene("Scenes/TitleScreen");
+                } else if(combatManager.getEnemiesList().Count == 0) {
+                    SceneManager.LoadScene("Scenes/Overworld");
+                    Debug.Log("YOU WIN");
+                }
+
+            }
             yield return null;
         }
     }

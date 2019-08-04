@@ -43,6 +43,8 @@ public class CombatManager : MonoBehaviour
 
     private CombatUIManager combatUIManager;
 
+    public bool debugAllies = false; //Set this to true to get the dark guy and the light girl at start
+
     public List<Character> characters;
 
     private Queue<ActInfo> charactersWaitingToAct = new Queue<ActInfo>(); //every character waiting to launch an attack is put in this list to be handled later
@@ -171,13 +173,13 @@ public class CombatManager : MonoBehaviour
     }
 
     public void getDamaged(string character, int damages) {
-        Debug.Log("Current Health: " + getCharacterFromName(character).currentHealth + ", Max Health: " + getCharacterFromName(character).getMaxHealth());
-        getCharacterFromName(character).currentHealth -= damages;
+        Character chara = getCharacterFromName(character);
+        chara.currentHealth -= damages;
         combatUIManager.getDamaged(character);
     }
 
     private void Update() {
-        if(actingCharacter == null && charactersWaitingToAct.Count > 0) {
+        if (actingCharacter == null && charactersWaitingToAct.Count > 0) {
 
             actingCharacter = charactersWaitingToAct.Dequeue();
 
@@ -185,12 +187,21 @@ public class CombatManager : MonoBehaviour
             waitingCharacterDamaged = actingCharacter.damagesInfo.Count;
 
             //send the act to the component in charge of the animation
-            foreach(CharacterCombat characterCombat in combatUIManager.getCharactersCombat()) {
-                if(characterCombat.getCharacName() == actingCharacter.characterName) {
+            foreach (CharacterCombat characterCombat in combatUIManager.getCharactersCombat()) {
+                if (characterCombat.getCharacName() == actingCharacter.characterName) {
                     characterCombat.act(actingCharacter);
                     combatUIManager.isATBTimeFlowing = false; //we stop ATB during attack animation
                 }
             }
+        }
+    }
+    
+
+    private void Start() {
+        if (debugAllies) {
+            Character cloud = Utility.loadNewCharacter("Cloud");
+            cloud.currentHealth = cloud.getMaxHealth();
+            characters.Add(cloud);
         }
     }
 }

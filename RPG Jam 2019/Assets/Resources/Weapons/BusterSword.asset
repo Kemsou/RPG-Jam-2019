@@ -20,7 +20,8 @@ MonoBehaviour:
   target: 2
   damages:
   - type: 0
-    amount: 60
+    amountMin: 30
+    amountMax: 45
   characBonus: []
   characMultiplier:
   - charac: 0
