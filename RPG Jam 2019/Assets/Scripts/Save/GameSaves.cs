@@ -7,8 +7,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using System.IO;
 
+
 [Serializable]
-public sealed class GameSaves
+public sealed class GameSaves  
 {
     [NonSerialized()] private static GameSaves instance = null;
     private static readonly object padlock = new object();
@@ -44,7 +45,7 @@ public sealed class GameSaves
     {
 
         gameManager = GameObject.FindWithTag("gameManager");
-        this.Save();
+        //this.Save();
     }
 
 
@@ -52,6 +53,7 @@ public sealed class GameSaves
 
     public void Save()
     {
+     
        
         FileStream fs = new FileStream(Application.persistentDataPath + "/" + this.FileName, FileMode.Create);
 
