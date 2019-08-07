@@ -11,10 +11,12 @@ public class PlayerMovement : MonoBehaviour
     private float position;
     private Rigidbody2D rb2D;
 
+    private Animator animator;
+
 
     void Start()
     {
-
+        animator = this.GetComponent<Animator>();
     }
 
     void Awake()
@@ -24,8 +26,14 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+
+        animator.SetFloat("VerticalAxis", vertical);
+        animator.SetFloat("HorizontalAxis", horizontal);
+
         //Debug.Log(GameSaves.Instance.gamesStates.entitys[0].name);
-        var move = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0);
+        var move = new Vector3(horizontal, vertical, 0);
         move = move.normalized * speed * Time.deltaTime;
         rb2D.MovePosition(transform.position + move);
     }
