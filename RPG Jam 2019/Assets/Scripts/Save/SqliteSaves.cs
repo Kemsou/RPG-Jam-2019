@@ -4,32 +4,34 @@ using UnityEngine;
 using System.Collections.Generic;
 
 
-public class SqliteSaves : MonoBehaviour
+public class SqliteSaves
 {
 
     private string dbPath;
 
-    private void Start()
+    public SqliteSaves()
     {
         dbPath = "URI=file:" + Application.persistentDataPath + "/Saves";
         //C:/Users/akitl/AppData/LocalLow/DefaultCompany/RPG Jam 2019/Saves
 
-        Save();
-        // InsertScore("GG Meade", 3701);
-        // InsertScore("US Grant", 4242);
-        // InsertScore("GB McClellan", 107);
-        // GetHighScores(10);
     }
 
-    public void Save()
+    public void Save(Dictionary<string, List<Data>> datas)
     {
         CreateSchema();
 
+        foreach (KeyValuePair<string, List<Data>> entry in datas)
+        {
+            foreach (Data data in entry.Value)
+            {
+                InsertData(data.sceneName,data.gameObjectName,data.componentName,data.valueName,data.value,data.type);
+            }
+        }
 
 
     }
 
-    
+
 
     public void CreateSchema()
     {
@@ -50,6 +52,7 @@ public class SqliteSaves : MonoBehaviour
                             " 'ComponentName'  TEXT ," +
                             " 'ValueName'      TEXT , " +
                             " 'Value'          TEXT ," +
+                            " 'Type'          TEXT ," +
                             "  PRIMARY KEY ( 'SceneName', 'GameObjectName','ComponentName','ValueName') " +
                             ");";
 
@@ -62,7 +65,7 @@ public class SqliteSaves : MonoBehaviour
     }
 
 
-    public void InsertData(string sceneName, string gameObjectName, string componentName, string valueName, string value)
+    public void InsertData(string sceneName, string gameObjectName, string componentName, string valueName, string value, string type)
     {
         using (var conn = new SqliteConnection(dbPath))
         {
@@ -70,8 +73,8 @@ public class SqliteSaves : MonoBehaviour
             using (var cmd = conn.CreateCommand())
             {
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "INSERT INTO 'Data' ('SceneName', 'GameObjectName', 'ComponentName', 'ValueName', 'Value' ) " +
-                                  "VALUES (@SceneName, @GameObjectName, @ComponentName , @ValueName , @Value);";
+                cmd.CommandText = "INSERT INTO 'Data' ('SceneName', 'GameObjectName', 'ComponentName', 'ValueName', 'Value' , 'Type') " +
+                                  "VALUES (@SceneName, @GameObjectName, @ComponentName , @ValueName , @Value, @Type);";
 
                 cmd.Parameters.Add(new SqliteParameter
                 {
@@ -103,15 +106,21 @@ public class SqliteSaves : MonoBehaviour
                     Value = value
                 });
 
+                cmd.Parameters.Add(new SqliteParameter
+                {
+                    ParameterName = "Type",
+                    Value = type
+                });
+
                 var result = cmd.ExecuteNonQuery();
-                Debug.Log("insert score: " + result);
+                Debug.Log("insert Data: " + result);
             }
         }
     }
 
-    public List<List<string>> GetHighScores(int limit)
+    public Dictionary<string, List<Data>> GetDatas()
     {
-        List<List<string>> datas = new List<List<string>>();
+        Dictionary<string, List<Data>> datas = new Dictionary<string, List<Data>>();
         using (var conn = new SqliteConnection(dbPath))
         {
             conn.Open();
@@ -122,19 +131,22 @@ public class SqliteSaves : MonoBehaviour
 
                 Debug.Log("scores (begin)");
                 var reader = cmd.ExecuteReader();
-                int i = 0;
                 while (reader.Read())
                 {
-                    datas[i].Add(reader.GetString(0)); //sceneName
-                    datas[i].Add(reader.GetString(1)); //gameObjectName
-                    datas[i].Add(reader.GetString(2)); //componentName
-                    datas[i].Add(reader.GetString(3)); //valueName
-                    datas[i].Add(reader.GetString(4)); // value
-                    i++;
+                    if (datas.ContainsKey(reader.GetString(0)))
+                    {
+                        datas[reader.GetString(0)].Add(new Data(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5)));
+                        //                                             sceneName       gameObjectName       componentName      valueName             value                 type
+                    }
+                    else
+                    {
+                        datas.Add(reader.GetString(0), new List<Data>());
+                        datas[reader.GetString(0)].Add(new Data(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5)));
+                    }
                 }
             }
         }
-          Debug.Log("Datas load");
+        Debug.Log("Datas load");
         return datas;
     }
 }

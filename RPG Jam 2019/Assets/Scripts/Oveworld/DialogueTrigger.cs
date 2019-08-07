@@ -10,6 +10,7 @@ public class DialogueTrigger : MonoBehaviour {
 	public Dialogue dialogue;
 	
 	[Savable] public bool isTrigerred = false;
+	[Savable] public Character test ;
 	public void TriggerDialogue ()
 	{ 
 		this.isTrigerred = true;

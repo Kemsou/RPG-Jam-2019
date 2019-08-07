@@ -8,16 +8,39 @@ using UnityEngine.SceneManagement;
 public class DataManagment : MonoBehaviour
 {
     // Start is called before the first frame update
-    public Dictionary<string,List<Data>> datas;
+    public Dictionary<string, List<Data>> datas;
     public string sceneActiveName;
+    public  SqliteSaves  sqlite;
     void Start()
     {
         //get the active scene name
-         Scene scene = SceneManager.GetActiveScene();
-         sceneActiveName = scene.name;
-          Debug.Log("######"+sceneActiveName);
+        Scene scene = SceneManager.GetActiveScene();
+        sceneActiveName = scene.name;
+        Debug.Log("######" + sceneActiveName);
 
-         MonoBehaviour[] sceneActive = FindObjectsOfType<MonoBehaviour>();
+        datas = new Dictionary<string, List<Data>>();
+        sqlite = new SqliteSaves();
+
+        save();
+        load();
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    void load()
+    {
+        this.datas = sqlite.GetDatas();
+        Debug.Log(this.datas.Count);
+    }
+
+    void save()
+    {
+        MonoBehaviour[] sceneActive = FindObjectsOfType<MonoBehaviour>();
         foreach (MonoBehaviour mono in sceneActive)
         {
             FieldInfo[] objectFields = mono.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public);
@@ -25,22 +48,24 @@ public class DataManagment : MonoBehaviour
             {
                 Savable attribute = Attribute.GetCustomAttribute(objectFields[i], typeof(Savable)) as Savable;
                 if (attribute != null)
-                 Debug.Log("#1#"+mono.GetType() + " #2#"+objectFields[i].Name + " #3#"+objectFields[i].GetValue(mono)+ " #4#"+mono.name);
-            }                 //Componenet name         //valueName                 // value
-        }
-    }
+                {
 
-    // Update is called once per frame
-        void Update()
-    {
+                    if (datas.ContainsKey(sceneActiveName))
+                    {
+
+                        datas[sceneActiveName].Add(new Data(sceneActiveName, mono.name, mono.GetType().ToString(), objectFields[i].Name, objectFields[i].GetValue(mono).ToString(), objectFields[i].GetValue(mono).GetType().ToString()));
+                    }
+                    else
+                    {
+                        datas.Add(sceneActiveName, new List<Data>());
+                        datas[sceneActiveName].Add(new Data(sceneActiveName, mono.name, mono.GetType().ToString(), objectFields[i].Name, objectFields[i].GetValue(mono).ToString(), objectFields[i].GetValue(mono).GetType().ToString()));
+                    }
+
+                    Debug.Log("#1#" + mono.GetType() + " #2#" + objectFields[i].Name + " #3#" + objectFields[i].GetValue(mono) + " #4#" + mono.name + " #5#" + objectFields[i].GetValue(mono).GetType());
+                }                 //Componenet name         //valueName                 // value
+            }
+        }
+    sqlite.Save(this.datas);
         
     }
 }
-
-  public class Data{
-        public string sceneName ;
-        public string gameObjectName;
-        public string componentName;
-        public string valueName;
-        public string value;
-    }

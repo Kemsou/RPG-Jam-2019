@@ -12538,6 +12538,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogue: {fileID: 11400000, guid: c48b38ecc4c986b42a5911c89d2f13f9, type: 2}
   isTrigerred: 0
+  test: {fileID: 11400000, guid: 1494d7bd89c3dd8499b23bda63e45a94, type: 2}
 --- !u!1 &2090272695
 GameObject:
   m_ObjectHideFlags: 0
