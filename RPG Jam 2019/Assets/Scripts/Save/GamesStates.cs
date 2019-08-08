@@ -7,6 +7,7 @@ using System;
 public class GamesStates
 {
     public string FileName { get; set; }
+    public Dictionary<string, int> all;
 
     // public Hashtable entities { get; set; }
 
