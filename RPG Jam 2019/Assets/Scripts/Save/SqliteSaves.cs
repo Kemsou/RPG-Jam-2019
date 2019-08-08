@@ -24,7 +24,20 @@ public class SqliteSaves
         {
             foreach (Data data in entry.Value)
             {
-                InsertData(data.sceneName,data.gameObjectName,data.componentName,data.valueName,data.value,data.type);
+                switch (data.type)
+                {
+                    case "Character":
+                        InsertCharacter((CharacterData)data);
+                        InsertInventory((CharacterData)data);
+                        break;
+                    case "2":
+
+                        break;
+                    default:
+                        InsertData(data);
+                        break;
+                }
+
             }
         }
 
@@ -56,7 +69,35 @@ public class SqliteSaves
                             "  PRIMARY KEY ( 'SceneName', 'GameObjectName','ComponentName','ValueName') " +
                             ");";
 
-                Debug.Log(cmd.CommandText);
+                result = cmd.ExecuteNonQuery();
+
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "CREATE TABLE 'Character' ( " +
+                            " 'SceneName'  TEXT , " +
+                            " 'GameObjectName' TEXT ," +
+                            " 'ComponentName'  TEXT ," +
+                            " 'ValueName'      TEXT , " +
+                            " 'Value'          TEXT ," +
+                            " 'Type'          TEXT ," +
+                            " 'name'          TEXT ," +
+                            " 'lvl'           INTEGER ," +
+                            " 'isAlly'        BOOLEAN ," +
+                            " 'currentHealth' INTEGER ," +
+                            " 'currentMana'   INTEGER ," +
+                            " 'armorName'     TEXT ," +
+                            " 'weaponName'    TEXT ," +
+                            " 'gold'          INTEGER ," +
+                            "  PRIMARY KEY ( 'SceneName', 'GameObjectName','ComponentName','ValueName') " +
+                            ");";
+                result = cmd.ExecuteNonQuery();
+
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "CREATE TABLE 'Inventory' ( " +
+                            " 'Id'  INTEGER , " +
+                            " 'ItemName' TEXT ," +
+                            " 'ItemQuantity'  INTEGER," +
+                            "  PRIMARY KEY ( 'Id') " +
+                            ");";
                 result = cmd.ExecuteNonQuery();
 
                 Debug.Log("create schema: " + result);
@@ -65,7 +106,7 @@ public class SqliteSaves
     }
 
 
-    public void InsertData(string sceneName, string gameObjectName, string componentName, string valueName, string value, string type)
+    public void InsertData(Data data)
     {
         using (var conn = new SqliteConnection(dbPath))
         {
@@ -79,37 +120,37 @@ public class SqliteSaves
                 cmd.Parameters.Add(new SqliteParameter
                 {
                     ParameterName = "SceneName",
-                    Value = sceneName
+                    Value = data.sceneName
                 });
 
                 cmd.Parameters.Add(new SqliteParameter
                 {
                     ParameterName = "GameObjectName",
-                    Value = gameObjectName
+                    Value = data.gameObjectName
                 });
 
                 cmd.Parameters.Add(new SqliteParameter
                 {
                     ParameterName = "ComponentName",
-                    Value = componentName
+                    Value = data.componentName
                 });
 
                 cmd.Parameters.Add(new SqliteParameter
                 {
                     ParameterName = "ValueName",
-                    Value = valueName
+                    Value = data.valueName
                 });
 
                 cmd.Parameters.Add(new SqliteParameter
                 {
                     ParameterName = "Value",
-                    Value = value
+                    Value = data.value
                 });
 
                 cmd.Parameters.Add(new SqliteParameter
                 {
                     ParameterName = "Type",
-                    Value = type
+                    Value = data.type
                 });
 
                 var result = cmd.ExecuteNonQuery();
@@ -117,6 +158,140 @@ public class SqliteSaves
             }
         }
     }
+
+    public void InsertCharacter(CharacterData character)
+    {
+        using (var conn = new SqliteConnection(dbPath))
+        {
+            conn.Open();
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "INSERT INTO 'Character' ('SceneName', 'GameObjectName', 'ComponentName', 'ValueName', 'Value' , 'Type', 'name', 'lvl', 'isAlly', 'currentHealth', 'currentMana', 'armorName', 'weaponName', 'gold' " +
+                                  "VALUES (@SceneName, @GameObjectName, @ComponentName , @ValueName , @Value, @Type, @name, @lvl, @isAlly, @currentHealth, @currentMana, @armorName, @weaponName, @gold );";
+
+                cmd.Parameters.Add(new SqliteParameter
+                {
+                    ParameterName = "SceneName",
+                    Value = character.sceneName
+                });
+
+                cmd.Parameters.Add(new SqliteParameter
+                {
+                    ParameterName = "GameObjectName",
+                    Value = character.gameObjectName
+                });
+
+                cmd.Parameters.Add(new SqliteParameter
+                {
+                    ParameterName = "ComponentName",
+                    Value = character.componentName
+                });
+
+                cmd.Parameters.Add(new SqliteParameter
+                {
+                    ParameterName = "ValueName",
+                    Value = character.valueName
+                });
+
+                cmd.Parameters.Add(new SqliteParameter
+                {
+                    ParameterName = "Value",
+                    Value = character.value
+                });
+
+                cmd.Parameters.Add(new SqliteParameter
+                {
+                    ParameterName = "Type",
+                    Value = character.type
+                });
+
+                cmd.Parameters.Add(new SqliteParameter
+                {
+                    ParameterName = "name",
+                    Value = character.name
+                });
+
+                cmd.Parameters.Add(new SqliteParameter
+                {
+                    ParameterName = "lvl",
+                    Value = character.lvl
+                });
+
+                cmd.Parameters.Add(new SqliteParameter
+                {
+                    ParameterName = "isAlly",
+                    Value = character.isAlly
+                });
+
+                cmd.Parameters.Add(new SqliteParameter
+                {
+                    ParameterName = "currentHealth",
+                    Value = character.currentHealth
+                });
+
+                cmd.Parameters.Add(new SqliteParameter
+                {
+                    ParameterName = "currentMana",
+                    Value = character.currentMana
+                });
+
+                cmd.Parameters.Add(new SqliteParameter
+                {
+                    ParameterName = "armorName",
+                    Value = character.armorName
+                });
+
+                cmd.Parameters.Add(new SqliteParameter
+                {
+                    ParameterName = "weaponName",
+                    Value = character.weaponName
+                });
+
+                cmd.Parameters.Add(new SqliteParameter
+                {
+                    ParameterName = "gold",
+                    Value = character.gold
+                });
+
+                var result = cmd.ExecuteNonQuery();
+                Debug.Log("insert Data: " + result);
+            }
+        }
+    }
+
+    public void InsertInventory(CharacterData character){
+        using (var conn = new SqliteConnection(dbPath))
+        {
+            conn.Open();
+            using (var cmd = conn.CreateCommand())
+            {
+
+                foreach (var Names in character.inventoryNames)
+                {
+                    
+                }
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "INSERT INTO 'Data' ('SceneName', 'GameObjectName', 'ComponentName', 'ValueName', 'Value' , 'Type') " +
+                                  "VALUES (@SceneName, @GameObjectName, @ComponentName , @ValueName , @Value, @Type);";
+
+                cmd.Parameters.Add(new SqliteParameter
+                {
+                    ParameterName = "SceneName",
+                    Value = character.sceneName
+                });
+
+                cmd.Parameters.Add(new SqliteParameter
+                {
+                    ParameterName = "GameObjectName",
+                    Value = character.gameObjectName
+                });
+
+                var result = cmd.ExecuteNonQuery();
+            }
+        }
+    }
+
 
     public Dictionary<string, List<Data>> GetDatas()
     {
@@ -129,7 +304,6 @@ public class SqliteSaves
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "SELECT * FROM 'Data';";
 
-                Debug.Log("scores (begin)");
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {

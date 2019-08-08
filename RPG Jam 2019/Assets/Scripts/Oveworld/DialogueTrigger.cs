@@ -11,6 +11,10 @@ public class DialogueTrigger : MonoBehaviour {
 	
 	[Savable] public bool isTrigerred = false;
 	[Savable] public Character test ;
+
+	 private void Start() {
+		test.armor = Resources.Load<Armor>("Armors/Basic Armor"); 
+	}
 	public void TriggerDialogue ()
 	{ 
 		this.isTrigerred = true;
