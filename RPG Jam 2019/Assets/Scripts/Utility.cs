@@ -55,6 +55,10 @@ public static class Utility {
         }
     }
 
+    public static Steps getProgressionSteps() {
+        return (Steps) Resources.Load("World/Steps");
+    }
+
     //return the corresponding damages info inflicted by a character
     public static DamagesInfo getDamagesInfo(List<Damage> damages, List<CharacMultiplier> multipliers, List<Alteration> alterations, Character caster, Character target) {
         Dictionary<DamageType, int> returnDamages = new Dictionary<DamageType, int>();
