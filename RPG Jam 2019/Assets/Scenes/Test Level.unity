@@ -561,8 +561,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 557cfae26dc67bc46bd6f18e05ad1021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trigger: {fileID: 0}
-  dm: {fileID: 0}
 --- !u!114 &65486080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -576,8 +574,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogue: {fileID: 11400000, guid: c48b38ecc4c986b42a5911c89d2f13f9, type: 2}
-  isTrigerred: 0
-  test: {fileID: 0}
 --- !u!61 &65486081
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2810,7 +2806,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &580396771
 GameObject:
@@ -3011,7 +3007,7 @@ RectTransform:
   m_Children:
   - {fileID: 435779254}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3178,7 +3174,7 @@ Transform:
   - {fileID: 1382413688}
   - {fileID: 126421278}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &663307442
 GameObject:
@@ -3580,8 +3576,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 557cfae26dc67bc46bd6f18e05ad1021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trigger: {fileID: 0}
-  dm: {fileID: 0}
 --- !u!114 &743403622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3595,8 +3589,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogue: {fileID: 11400000, guid: c48b38ecc4c986b42a5911c89d2f13f9, type: 2}
-  isTrigerred: 0
-  test: {fileID: 0}
 --- !u!61 &743403623
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3814,7 +3806,7 @@ Transform:
   - {fileID: 822868281}
   - {fileID: 1393928009}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &793703582
 GameObject:
@@ -3969,8 +3961,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 557cfae26dc67bc46bd6f18e05ad1021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trigger: {fileID: 0}
-  dm: {fileID: 0}
 --- !u!114 &822868283
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3984,8 +3974,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogue: {fileID: 11400000, guid: c48b38ecc4c986b42a5911c89d2f13f9, type: 2}
-  isTrigerred: 0
-  test: {fileID: 0}
 --- !u!61 &822868284
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4208,7 +4196,7 @@ Transform:
   - {fileID: 464238646}
   - {fileID: 2131375892}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &962693900
 GameObject:
@@ -4942,7 +4930,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1347995998
 GameObject:
@@ -5204,8 +5192,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 557cfae26dc67bc46bd6f18e05ad1021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trigger: {fileID: 0}
-  dm: {fileID: 0}
 --- !u!114 &1393928011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5219,8 +5205,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogue: {fileID: 11400000, guid: c48b38ecc4c986b42a5911c89d2f13f9, type: 2}
-  isTrigerred: 0
-  test: {fileID: 0}
 --- !u!61 &1393928012
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5542,8 +5526,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 557cfae26dc67bc46bd6f18e05ad1021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trigger: {fileID: 0}
-  dm: {fileID: 0}
 --- !u!114 &1462267527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5557,8 +5539,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogue: {fileID: 11400000, guid: c48b38ecc4c986b42a5911c89d2f13f9, type: 2}
-  isTrigerred: 0
-  test: {fileID: 0}
 --- !u!61 &1462267528
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5695,7 +5675,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1555963788
 GameObject:
@@ -6228,7 +6208,7 @@ Transform:
   - {fileID: 71023680}
   - {fileID: 580396772}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1670125492
 GameObject:
@@ -7118,7 +7098,6 @@ GameObject:
   - component: {fileID: 1969688048}
   - component: {fileID: 1969688047}
   - component: {fileID: 1969688046}
-  - component: {fileID: 1969688045}
   - component: {fileID: 1969688050}
   m_Layer: 0
   m_Name: NPC (3)
@@ -7141,20 +7120,6 @@ Transform:
   m_Father: {fileID: 792606441}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1969688045
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1969688043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 557cfae26dc67bc46bd6f18e05ad1021, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  trigger: {fileID: 0}
-  dm: {fileID: 0}
 --- !u!114 &1969688046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7168,8 +7133,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogue: {fileID: 11400000, guid: c48b38ecc4c986b42a5911c89d2f13f9, type: 2}
-  isTrigerred: 0
-  test: {fileID: 0}
 --- !u!61 &1969688047
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void VoidDelegate();
+
 public static class Const {
     public const float MULTIPLIER_S = 2f;
     public const float MULTIPLIER_A = 1.4f;
@@ -12,6 +14,7 @@ public static class Const {
 }
 
 public static class Utility {
+
     //way to calculate the rating from a carac. This is used to determine the amount of bonus damage a weapon has, depending on its multiplier (exactly the same way as in Dark Souls) https://darksouls.fandom.com/wiki/Parameter_Bonus
     public static float getRating(int characLevel) {
         if (characLevel <= 10) {
